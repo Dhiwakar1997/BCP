@@ -1,9 +1,15 @@
 const express = require("express");
 const app = express();
+const Database = require("./config/database.config");
 
-app.listen("3000", (err) => {
-  if (err) {
-    console.log("unable to connect to server", err.message);
+(async () => {
+  try {
+    await new Database().Connect();
+    app.listen(3000, () => {
+      console.log("server up and running on port 3000");
+    });
+  } catch (err) {
+    console.error("Failed to start:", err.message || err);
+    process.exit(1);
   }
-  console.log("server up and running");
-});
+})();
