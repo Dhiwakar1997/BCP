@@ -6,4 +6,5 @@ module.exports = {
   extendFreeLimit: async (req, res) => {},
   managekey: async (req, res) => {},
   deleteKey: async (req, res) => {},
+  getAllUsers: async (req, res) => {},
 };
