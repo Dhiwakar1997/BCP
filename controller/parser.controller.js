@@ -1,15 +1,26 @@
+const ParserService = require("../services/parserService")
+
 class ParserController {
+
   parser(req, res) {
     res.json({ message: "This parser can parse GS1, HIBC and EAN_13 data" });
   }
   GS1_parser(req, res) {
     res.json({ message: "Returning all GS1 data" });
   }
-  HIBC_parser(req, res) {
-    res.json({ message: "Returning all HIBC data" });
+  async HIBC_parser(req, res) {
+    const { barcode1, barcode2 } = req.body;
+    const parserService = new ParserService();
+    const result = await parserService.HIBC(barcode1,barcode2)
+    res.json(result);
   }
-  EAN_13_parser(req, res) {
-    res.json({ message: "Returning all EAN_13 data" });
+  async EAN_13_parser(req, res) {
+    const { barcode } = req.body;
+
+    const parserService = new ParserService();
+    const result = await parserService.EAN_13(barcode);
+
+    res.json(result);
   }
 }
 
