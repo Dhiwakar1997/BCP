@@ -19,6 +19,7 @@ module.exports = {
             id: existingUser._id,
             name: existingUser.Username,
             email: existingUser.UserEmail,
+            accountType: existingUser.AccountType,
           },
           keys.JwtSecret,
           { expiresIn: "7d" }
@@ -44,6 +45,7 @@ module.exports = {
           id: newUser._id,
           name: newUser.Username,
           email: newUser.UserEmail,
+          accountType: newUser.AccountType,
         },
         keys.JwtSecret,
         { expiresIn: "7d" }

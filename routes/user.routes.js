@@ -2,16 +2,12 @@ const express = require("express");
 const UserRouter = express.Router();
 const userController = require("../controller/user.controller");
 const AuthMiddleware = require("../middleware/authentication.middleware");
-
-UserRouter.get(
-  "/getUsers",
-  AuthMiddleware.authenticateUser,
-  userController.getAllUsers
-);
+const RateLimiter = require("../middleware/rateLimiter.middleware");
 
 UserRouter.get(
   "/allUsers",
   AuthMiddleware.authenticateUser,
+  RateLimiter(),
   userController.getAllUsers
 );
 
