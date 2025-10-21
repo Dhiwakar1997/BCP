@@ -16,7 +16,7 @@ module.exports = {
       req.user = decoded;
 
       req.apiContext = {
-        apiLimit: 1000,
+        apiLimit: 30,
         used: 0,
       };
 
