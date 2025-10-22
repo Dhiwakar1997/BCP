@@ -1,12 +1,14 @@
 const express = require("express");
-const router = express.Router();
+const UserRouter = express.Router();
 const userController = require("../controller/user.controller");
 const AuthMiddleware = require("../middleware/authentication.middleware");
+const RateLimiter = require("../middleware/rateLimiter.middleware");
 
-router.get(
-  "/getUsers",
+UserRouter.get(
+  "/allUsers",
   AuthMiddleware.authenticateUser,
+  RateLimiter(),
   userController.getAllUsers
 );
 
-module.exports = router;
+module.exports = UserRouter;

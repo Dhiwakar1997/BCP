@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "keys",
   },
+  AuthProvider: {
+    type: String,
+    default: "",
+  },
 });
 
 module.exports = mongoose.model("users", UserSchema);

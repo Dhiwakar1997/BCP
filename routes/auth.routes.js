@@ -9,11 +9,10 @@ AuthRouter.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-// Step 2: Handle Google callback → calls createUser
 AuthRouter.get(
   "/api/auth/google/callback",
   passport.authenticate("google", { session: false }),
-  UserController.createUser
+  UserController.createAuthenticatedUser
 );
 
 module.exports = AuthRouter;
