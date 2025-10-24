@@ -1,5 +1,10 @@
 class ParserService {
 
+    async GS1(barcode){
+        tempBarcode = barcode;
+   
+    }
+
     async HIBC(barcode1,barcode2) {
 
         const ItemNum = await this.HIBC_primary_parser(barcode1)
@@ -28,7 +33,7 @@ class ParserService {
 
         const SN_Ptn =/(\+\$\$\+(?<MMYY>(0[0-9]|1[0-2])[0-9]{2})(?<SN>.{0,13})..|\+\$\$\+2(?<MMDDYY>(0[0-9]|1[0-2])([0-2][0-9]|3[0-1])[0-9]{2})(?<SN>.{0,13})..|\+\$\$\+3(?<YYMMDD>([0-9]{2})(0[0-9]|1[0-2])([0-2][0-9]|3[0-1]))(?<SN>.{0,13})..|\+\$\$\+4(?<YYMMDDHH>([0-9]{2})(0[0-9]|1[0-2])([0-2][0-9]|3[0-1])([0-1][0-9]|2[0-4]))(?<SN>.{0,13})..|\+\$\$\+5(?<YYJJJ>(?<yy>[0-9]{2})(?<jjj>[0-2][0-9][0-9]|3[0-6][0-9]))(?<SN>.{0,13})..|\+\$\$\+6(?<YYJJJHH>(?<yy>[0-9]{2})(?<jjj>[0-2][0-9][0-9]|3[0-6][0-9])(?<hh>[0-1][0-9]|2[0-4]))(?<SN>.{0,13})..|(\+\$\$\+7|\+\$\+)(?<SN>.{0,13})..)/
 
-        if (barcodeString.startsWith("+$$+")){
+        if (barcodeString.startsWith("+$$+") || barcodeString.startsWith("+$+")){
          LotSnPtn = SN_Ptn
         }
         else{
