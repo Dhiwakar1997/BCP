@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "34ff0852-4261-44fd-aa24-bc84185781dd",
+		"name": "BCP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13007542"
+	},
+	"item": [
+		{
+			"name": "Local",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "GetUsers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{localEndPoint}}/v1/user",
+									"host": [
+										"{{localEndPoint}}"
+									],
+									"path": [
+										"v1",
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Parser",
+					"item": [
+						{
+							"name": "GS1",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{localEndPoint}}/v1/parser/gs1",
+									"host": [
+										"{{localEndPoint}}"
+									],
+									"path": [
+										"v1",
+										"parser",
+										"gs1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "HIBC",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"barcode1\":\"+A123B1276345C1\",\"barcode2\":\"+$$+30509280001LC\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localEndPoint}}/v1/parser/hibc",
+									"host": [
+										"{{localEndPoint}}"
+									],
+									"path": [
+										"v1",
+										"parser",
+										"hibc"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "EAN_13",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"barcode\":\"8401234567890\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{localEndPoint}}/v1/parser/ean_13",
+									"host": [
+										"{{localEndPoint}}"
+									],
+									"path": [
+										"v1",
+										"parser",
+										"ean_13"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All Parser",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{localEndPoint}}/v1/parser/",
+									"host": [
+										"{{localEndPoint}}"
+									],
+									"path": [
+										"v1",
+										"parser",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
