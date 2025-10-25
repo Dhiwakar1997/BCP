@@ -13,7 +13,8 @@ const UserRoutes = require("./routes/user.routes");
 
 app.use(AuthRoutes);
 app.use(UserRoutes);
-app.use("/user", userRoutes);
-app.use("/parser", parserRoutes);
+
+app.use("/v1/user", userRoutes);
+app.use("/v1/parser", parserRoutes);
 
 module.exports = app;
