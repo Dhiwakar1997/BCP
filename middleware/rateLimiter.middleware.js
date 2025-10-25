@@ -22,7 +22,7 @@ const RateLimiter = () => async (req, res, next) => {
         const secondsUntilEndOfDay =
           24 * 60 * 60 -
           (now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds());
-        await redisClient.expire(dayKey, secondsUntilEndOfDay);
+        await redisClient.expire(daykey, secondsUntilEndOfDay);
       }
     }
     const secondKey = `sec:${userKey}:${Math.floor(Date.now() / 1000)}`;
