@@ -19,7 +19,7 @@ class ParserService {
     async GS1(barcode){
         if(barcode.match(/\x1D/))
         {
-            //TODO: Need to craete a function for GS1 with GS
+            //TODO: Need to create a function for GS1 with GS
             await this.GS1_without_GS(barcode)
         }
         else{
@@ -183,7 +183,6 @@ class ParserService {
         await this.HIBC_primary_parser(barcode1)
         await this.HIBC_secondary_parser(barcode2)
 
-        console.log(this.parsedData)
         return {
             item_number: this.parsedData.itemNumber,
             expiry_date: this.parsedData.expDateStr,
@@ -293,7 +292,6 @@ class ParserService {
             const start = new Date(Date.UTC(year, 0, 1));
             this.parsedData.expDateStr = setExpDateAndStr(new Date(start.getTime() + dayIndex * 86400000));
         }
-        console.log(this.parsedData)
     }
 
     async EAN_13(barcode){
