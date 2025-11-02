@@ -6,13 +6,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
 
-const ParserRoutes = require("./routes/parser.routes");
+const parserRoutes = require("./routes/parser.routes");
 const AuthRoutes = require("./routes/auth.routes");
 const UserRoutes = require("./routes/user.routes");
 
 app.use(AuthRoutes);
 //authenticated routes with token, key and rate limit
 app.use("/v1/user", UserRoutes);
-app.use("/v1/parser", ParserRoutes);
+app.use("/v1/parser", parserRoutes);
 
 module.exports = app;
