@@ -15,12 +15,12 @@ class ParserService {
             isFullyParsed: false
         };
         this.parsedData = parsedData
+        this.barcodeString = ""
     }
     async GS1(barcode){
         if(barcode.match(/\x1D/))
         {
-            //TODO: Need to create a function for GS1 with GS
-            await this.GS1_without_GS(barcode)
+            await this.GS1_with_GS(barcode)
         }
         else{
             await this.GS1_without_GS(barcode)
@@ -36,6 +36,63 @@ class ParserService {
         }
        }
 
+    async GS1_with_GS(barcode){
+
+    var AI_pattern = /(^(?<itemNumber_ai>01)(?<itemNumber>[0-9]{14})|(?<lot_ai>10)(?<lotNumber>[\x21-\x22\x25-\x2F\x30-\x39\x3A-\x3F\x41-\x5A\x5F\x61-\x7A]{1,20})\x1D|(?<sn_ai>21)(?<sn>[\x21-\x22\x25-\x2F\x30-\x39\x3A-\x3F\x41-\x5A\x5F\x61-\x7A]{1,20})\x1D|^(?<mfg_date_ai>11)(?<mfg_date>[0-9]{6})|^(?<exp_date_ai>17)(?<exp_date>[0-9]{6}))/
+
+    while(barcode!=""){
+
+        var barcodeMatch = barcode.match(AI_pattern)
+
+        if(barcodeMatch){
+            const barcodeGroups = barcodeMatch.groups || {};
+            if(barcodeGroups.itemNumber_ai){
+                this.parsedData.itemNumber = barcodeGroups.itemNumber
+            }
+            // Lot Number
+            else if (barcodeGroups.lot_ai) {
+                this.parsedData.lotNumber = barcodeGroups.lotNumber;
+            }
+            // Serial Number
+           else if (barcodeGroups.sn_ai) {
+                this.parsedData.serialNumber = barcodeGroups.sn;
+            }
+            // Manufacture Date
+           else if (barcodeGroups.mfg_date_ai && barcodeGroups.mfg_date) {
+                // mfg_date in YYMMDD
+                const yy = parseInt(barcodeGroups.mfg_date.slice(0, 2), 10);
+                const mm = parseInt(barcodeGroups.mfg_date.slice(2, 4), 10);
+                const dd = parseInt(barcodeGroups.mfg_date.slice(4, 6), 10);
+                const year = 2000 + yy;
+                const mfgDate = new Date(Date.UTC(year, mm - 1, dd));
+                this.parsedData.mfgDate = mfgDate;
+                const m = String(mfgDate.getUTCMonth() + 1).padStart(2, '0');
+                const d = String(mfgDate.getUTCDate()).padStart(2, '0');
+                this.parsedData.mfgDateStr = `${mfgDate.getUTCFullYear()}-${m}-${d}`;
+            }
+            // Expiry Date
+            else if (barcodeGroups.exp_date_ai && barcodeGroups.exp_date) {
+                // exp_date in YYMMDD
+                const yy = parseInt(barcodeGroups.exp_date.slice(0, 2), 10);
+                const mm = parseInt(barcodeGroups.exp_date.slice(2, 4), 10);
+                const dd = parseInt(barcodeGroups.exp_date.slice(4, 6), 10);
+                const year = 2000 + yy;
+                const expDate = new Date(Date.UTC(year, mm - 1, dd));
+                this.parsedData.expDate = expDate;
+                const m = String(expDate.getUTCMonth() + 1).padStart(2, '0');
+                const d = String(expDate.getUTCDate()).padStart(2, '0');
+                this.parsedData.expDateStr = `${expDate.getUTCFullYear()}-${m}-${d}`;
+            }
+            barcode = barcode.replace(barcodeMatch[1],"")
+
+        }
+        else{
+            break;
+        }
+    }
+
+    }
+
     async GS1_without_GS(barcode) {
         if (!barcode || typeof barcode !== 'string') {
             return {
@@ -46,7 +103,6 @@ class ParserService {
 
         let barcodeString = barcode;
 
-
         // Item Number Pattern matching
         const itemNumberPattern = /^01([0-9]{14})(?=$|10|21|17|11|9\d|\x1D)/;
         const itemNumberMatch = barcodeString.match(itemNumberPattern);
@@ -56,20 +112,6 @@ class ParserService {
             this.parsedData.primaryBarcode = "01" + this.parsedData.itemNumber;
             barcodeString = barcodeString.replace(itemNumberPattern, "");
             this.parsedData.secondaryBarcode = barcodeString;
-            
-            if (barcodeString.length === 0) {
-                this.parsedData.isPartiallyParsed = true;
-                return {
-                    success: true,
-                    ...parsedData
-                };
-            }
-        } else {
-            return {
-                success: false,
-                message: "Item Number not found",
-                ...parsedData
-            };
         }
 
         // Extract Manufacturing and Expiry dates
